@@ -12,6 +12,10 @@ export function authenticate(req, res, next) {
   else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
     token = req.headers.authorization.split(' ')[1];
   }
+  // 3. Fallback to URL Query Parameter (for direct download links, CSV exports, etc.)
+  else if (req.query && req.query.token) {
+    token = req.query.token;
+  }
 
   if (!token) {
     return res.status(401).json({
